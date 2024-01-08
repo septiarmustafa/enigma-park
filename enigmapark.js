@@ -14,10 +14,6 @@ class ParkLot {
     this.remaining = capacity;
     this.parkedCars = [];
   }
-
-  getParkedCarsCount() {
-    return this.parkedCars.length;
-  }
   createPark(capacity) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -30,14 +26,19 @@ class ParkLot {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (this.remaining > 0) {
-          this.parkedCars.push(car);
-          this.remaining--;
-          return resolve(
-            `Mobil ${car.owner} dengan Nopol ${car.noPol} berhasil parkir.`
-          );
+          if (!this.parkedCars.find((c) => c.noPol === car.noPol)) {
+            this.parkedCars.push(car);
+            this.remaining--;
+            return resolve(
+              `Mobil ${car.owner} dengan Nopol ${car.noPol} berhasil parkir.`
+            );
+          } else {
+            console.log(
+              `Mobil ${car.owner} dengan Nopol ${car.noPol} sudah parkir.`
+            );
+          }
         } else {
-          console.log("Maaf parkir sudah penuh");
-          //   return reject("Maaf parkir sudah penuh");
+          return reject("Maaf parkir sudah penuh");
         }
       }, 3000);
     });
